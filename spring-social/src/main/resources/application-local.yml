@@ -52,6 +52,28 @@ spring:
         filter:
           stat:
             log-slow-sql: true
+    #Redis
+    redis:
+      host: localhost
+      port: 6380
+      password: HKhn888*
+      # 连接超时时间（记得添加单位，Duration）
+      timeout: 10000ms
+      # Redis默认情况下有16个分片，这里配置具体使用的分片
+      database: 5
+      lettuce:
+        pool:
+          # 连接池最大连接数（使用负值表示没有限制） 默认 8
+          max-active: 8
+          # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1
+          max-wait: -1ms
+          # 连接池中的最大空闲连接 默认 8
+          max-idle: 8
+          # 连接池中的最小空闲连接 默认 0
+          min-idle: 0
+    cache:
+      # 一般来说是不用配置的，Spring Cache 会根据依赖的包自行装配
+      type: redis
 
     jpa:
         show-sql: true
@@ -67,19 +89,22 @@ spring:
           registration:
             google:
               clientId: 36933357862-4308uegej069gs4ggmflaga95erg0627.apps.googleusercontent.com
-#              5014057553-8gm9um6vnli3cle5rgigcdjpdrid14m9.apps.googleusercontent.com
+              #              5014057553-8gm9um6vnli3cle5rgigcdjpdrid14m9.apps.googleusercontent.com
               clientSecret: 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
-#              tWZKVLxaD_ARWsriiiUFYoIk
-              redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+              #              tWZKVLxaD_ARWsriiiUFYoIk
+              #              redirectUri: "{baseUrl}/api/oauth2/redirect/{registrationId}"
+#              redirectUri: "https://www.tmmtmm.online/api/oauth2/redirect/google"
+              redirectUri: "http://localhost:8080/oauth2/redirect/google"
+
               scope:
                 - email
                 - profile
             facebook:
               clientId: 1630380790958823
-#              121189305185277
+              #              121189305185277
               clientSecret: 698eb0d36ef2f01c25119caf5c4fa352
-#              42ffe5aa7379e8326387e0fe16f34132
-              redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+              #              42ffe5aa7379e8326387e0fe16f34132
+              redirectUri: "https://www.tmmtmm.online/api/oauth2/redirect/facebook"
               scope:
                 - email
                 - public_profile

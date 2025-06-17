@@ -28,3 +28,6 @@ spring:
       request-timeout: 5000
 
 baseUrl: https://www.tmmtmm.online
+google:
+  userinfo: https://www.googleapis.com/oauth2/v2/userinfo?access_token=
+  token: https://oauth2.googleapis.com/token

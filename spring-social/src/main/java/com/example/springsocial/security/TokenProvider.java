@@ -21,17 +21,32 @@ public class TokenProvider {
     }
 
     public String createToken(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Object principal = authentication.getPrincipal();
 
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+        if (principal instanceof UserPrincipal) {
+            UserPrincipal userPrincipal = (UserPrincipal) principal;
+            Date now = new Date();
+            Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
 
-        return Jwts.builder()
-                .setSubject(Long.toString(userPrincipal.getId()))
-                .setIssuedAt(new Date())
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
-                .compact();
+            return Jwts.builder()
+                    .setSubject(Long.toString(userPrincipal.getId()))
+                    .setIssuedAt(new Date())
+                    .setExpiration(expiryDate)
+                    .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
+                    .compact();
+        } else if (principal instanceof String) {
+            String username = (String) principal;
+            // 根据情况处理，比如根据用户名重新加载用户信息
+            Date now = new Date();
+            Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+            return Jwts.builder()
+                    .setSubject(username)
+                    .setIssuedAt(new Date())
+                    .setExpiration(expiryDate)
+                    .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
+                    .compact();
+        }
+        return null;
     }
 
     public Long getUserIdFromToken(String token) {
